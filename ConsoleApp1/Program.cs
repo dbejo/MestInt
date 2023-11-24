@@ -40,34 +40,65 @@ abstract class AbsztraktÁllapot : ICloneable
     public override int GetHashCode() { return base.GetHashCode(); }
 }
 
+class Korong
+{
+    string szin;
+    int atmero;
+    public Korong(string szin, int atmero) {
+        this.szin = szin;
+        this.atmero = atmero;
+    }
+
+    public string getSzin()
+    {
+        return szin;
+    }
+
+    public int getAtmero()
+    {
+        return atmero;
+    }
+}
+
+class Rud
+{
+    List<Korong> korongok;
+    public Rud(params Korong[] korongok)
+    {
+        this.korongok = korongok.ToList();
+    }
+
+    public Rud()
+    {
+        this.korongok = new List<Korong>();
+    }
+
+    public void AddKorong(Korong korong)
+    {
+        korongok.Add(korong);
+    }
+
+    public Korong RemoveTopKorong()
+    {
+        Korong korongToRemove = new Korong(korongok.Last().getSzin(), korongok.Last().getAtmero());
+        korongok.RemoveAt(korongok.Count - 1);
+        return korongToRemove;
+    }
+}
+
 class Feladat2p39 : AbsztraktÁllapot
 {
-    SortedDictionary<string,int> rud1 = new SortedDictionary<string,int>();
-    SortedDictionary<string,int> rud2 = new SortedDictionary<string,int>();
-    SortedDictionary<string,int> rud3 = new SortedDictionary<string,int>();
+    Rud rud1;
+    Rud rud2;
+    Rud rud3;
 
- public   Feladat2p39() {
-        rud1.Add("piros", 1);
-        rud1.Add("kek", 2);
-        rud1.Add("piros", 3);
-        rud1.Add("kek", 4);
-        rud1.Add("piros", 5);
-        rud1.Add("kek", 6);
-        rud1.Add("piros", 7);
-        rud1.Add("kek", 8);
-
-        rud2.Add("kek", 1);
-        rud2.Add("piros", 2);
-        rud2.Add("kek", 3);
-        rud2.Add("piros", 4);
-        rud2.Add("kek", 5);
-        rud2.Add("piros", 6);
-        rud2.Add("kek", 7);
-        rud2.Add("piros", 8);
+    public   Feladat2p39(Rud rud1, Rud rud2, Rud rud3) {
+        this.rud1 = rud1;
+        this.rud2 = rud2;
+        this.rud3 = rud3;
     }
     public override bool CélÁllapotE()
     {
-        rud1.ElementAt(0);
         throw new NotImplementedException();
     }
 
@@ -358,7 +389,26 @@ class Program
         Csúcs startCsúcs;
         GráfKereső kereső;
         Console.WriteLine("Az éhes huszár problémát megoldjuk 4x4-es táblán.");
-        startCsúcs = new Csúcs(new Feladat2p39());
+        startCsúcs = new Csúcs(new Feladat2p39(new Rud(
+            new Korong("kek", 8),
+            new Korong("piros", 7),
+            new Korong("kek", 6),
+            new Korong("piros", 5),
+            new Korong("kek", 4),
+            new Korong("piros", 3),
+            new Korong("kek", 2),
+            new Korong("piros", 1)),
+            new Rud(
+            new Korong("piros", 8),
+            new Korong("kek", 7),
+            new Korong("piros", 6),
+            new Korong("kek", 5),
+            new Korong("piros", 4),
+            new Korong("kek", 3),
+            new Korong("piros", 2),
+            new Korong("kek", 1)),
+            new Rud()
+            ));
         Console.WriteLine("A kereső egy 10 mélységi korlátos és emlékezetes backtrack.");
         kereső = new BackTrack(startCsúcs, 10, true);
         kereső.megoldásKiírása(kereső.Keresés());
