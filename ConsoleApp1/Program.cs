@@ -40,354 +40,50 @@ abstract class AbsztraktÁllapot : ICloneable
     public override int GetHashCode() { return base.GetHashCode(); }
 }
 
-/// <summary>
-/// A VakÁllapot csak a szemléltetés kedvért van itt.
-/// Megmutatja, hogy kell az operátorokat megírni és bekötni a szuper operátorba.
-/// </summary>
-abstract class VakÁllapot : AbsztraktÁllapot
+class Feladat2p39 : AbsztraktÁllapot
 {
-    // Itt kell megadni azokat a mezőket, amelyek tartalmazzák a belső állapotot.
-    // Az operátorok belső állapot átmenetet hajtanak végre.
-    // Először az alapoperátorokat kell megírni.
-    // Minden operátornak van előfeltétele.
-    // Minden operátor utófeltétele megegyezik az ÁllapotE predikátummal.
-    // Az operátor igazat ad vissza, ha alkalmazható, hamisat, ha nem alkalmazható.
-    // Egy operátor alkalmazható, ha a belső állapotra igaz
-    // az előfeltétele és az állapotátmenet után igaz az utófeltétele.
-    // Ez az első alapoperátor.
-    private bool op1()
-    {
-        // Ha az előfeltétel hamis, akkor az operátor nem alkalmazható.
-        if (!preOp1()) return false;
-        // állapot átmenet
-        //
-        // TODO: Itt kell kiegészíteni a kódot!
-        //
-        // Utófeltétel vizsgálata, ha igaz, akkor alkalmazható az operátor.
-        if (ÁllapotE()) return true;
-        // Egyébként vissza kell vonni a belső állapot átmenetet,
-        //
-        // TODO: Itt kell kiegészíteni a kódot!
-        //
-        // és vissza kell adni, hogy nem alkalmazható az operátor.
-        return false;
+    SortedDictionary<string,int> rud1 = new SortedDictionary<string,int>();
+    SortedDictionary<string,int> rud2 = new SortedDictionary<string,int>();
+    SortedDictionary<string,int> rud3 = new SortedDictionary<string,int>();
+
+ public   Feladat2p39() {
+        rud1.Add("piros", 1);
+        rud1.Add("kek", 2);
+        rud1.Add("piros", 3);
+        rud1.Add("kek", 4);
+        rud1.Add("piros", 5);
+        rud1.Add("kek", 6);
+        rud1.Add("piros", 7);
+        rud1.Add("kek", 8);
+
+        rud2.Add("kek", 1);
+        rud2.Add("piros", 2);
+        rud2.Add("kek", 3);
+        rud2.Add("piros", 4);
+        rud2.Add("kek", 5);
+        rud2.Add("piros", 6);
+        rud2.Add("kek", 7);
+        rud2.Add("piros", 8);
     }
-    // Az első alapoperátor előfeltétele. Az előfeltétel neve általában ez: pre+operátor neve.
-    // Ez segíti a kód megértését, de nyugodtan eltérhetünk ettől.
-    private bool preOp1()
+    public override bool CélÁllapotE()
     {
-        // Ha igaz az előfeltétel, akkor igazat ad vissza.
-        return true;
+        rud1.ElementAt(0);
+        throw new NotImplementedException();
     }
-    // Egy másik operátor.
-    private bool op2()
-    {
-        if (!preOp2()) return false;
-        // Állapot átmenet:
-        // TODO: Itt kell kiegészíteni a kódot!
-        if (ÁllapotE()) return true;
-        // Egyébként vissza kell vonni a belső állapot átmenetet:
-        // TODO: Itt kell kiegészíteni a kódot!
-        return false;
-    }
-    private bool preOp2()
-    {
-        // Ha igaz az előfeltétel, akkor igazat ad vissza.
-        return true;
-    }
-    // Nézzük, mi a helyzet, ha az operátornak van paramétere.
-    // Ilyenkor egy operátor több alapoperátornak felel meg.
-    private bool op3(int i)
-    {
-        // Az előfeltételt ugyanazokkal a pereméterekkel kell hívni, mint magát az operátort.
-        if (!preOp3(i)) return false;
-        // Állapot átmenet:
-        // TODO: Itt kell kiegészíteni a kódot!
-        if (ÁllapotE()) return true;
-        // egyébként vissza kell vonni a belső állapot átmenetet
-        // TODO: Itt kell kiegészíteni a kódot!
-        return false;
-    }
-    // Az előfeltétel paraméterlistája megegyezik az operátor paraméterlistájával.
-    private bool preOp3(int i)
-    {
-        // Ha igaz az előfeltétel, akkor igazat ad vissza. Az előfeltétel függ a paraméterektől.
-        return true;
-    }
-    // Ez a szuper operátor. Ezen keresztül lehet hívni az alapoperátorokat.
-    // Az i paraméterrel mondjuk meg, hanyadik operátort akarjuk hívni.
-    // Általában egy for ciklusból hívjuk, ami 0-tól az OperátorokSzáma()-ig fut.
-    public override bool SzuperOperátor(int i)
-    {
-        switch (i)
-        {
-            // Itt kell felsorolnom az összes alapoperátort.
-            // Ha egy új operátort veszek fel, akkor ide is fel kell venni.
-            case 0: return op1();
-            case 1: return op2();
-            // A paraméteres operátorok több alap operátornak megfelelnek, ezért itt több sor is tartozik hozzájuk.
-            // Hogy hány sor, az feladat függő.
-            case 3: return op3(0);
-            case 4: return op3(1);
-            case 5: return op3(2);
-            default: return false;
-        }
-    }
-    // Visszaadja az alap operátorok számát.
+
     public override int OperátorokSzáma()
     {
-        // Az utolsó case számát kell itt visszaadni.
-        // Ha bővítjük az operátorok számát, ezt a számot is növelni kell.
-        return 5;
+        throw new NotImplementedException();
     }
-}
 
-
-/// <summary>
-/// Ez a “éhes huszár” probléma állapottér reprezentációja.
-/// A huszárnak az állomás helyétől, a bal felső sarokból,
-/// el kell jutnia a kantinba, ami a jobb alsó sarokban van.
-/// A táblát egy (N+4)*(N+4) mátrixszal ábrázolom.
-/// A külső 2 széles rész margó, a belső rész a tábla.
-/// A margó használatával sokkal könnyebb megírni az ÁllapotE predikátumot.
-/// A 0 jelentése üres. Az 1 jelentése, itt van a ló.
-/// 3*3-mas tábla esetén a kezdő állapot:
-/// 0,0,0,0,0,0,0
-/// 0,0,0,0,0,0,0
-/// 0,0,1,0,0,0,0
-/// 0,0,0,0,0,0,0
-/// 0,0,0,0,0,0,0
-/// 0,0,0,0,0,0,0
-/// 0,0,0,0,0,0,0
-/// A fenti reprezentációból látszik, hogy elég csak a ló helyét nyilvántartani,
-/// mert a táblán csak a ló van. Így a kezdő állpot (bal felső sarokból indulunk):
-/// x = 2
-/// y = 2
-/// A célállapot (jobb alsó sarokba megyek):
-/// x = N+1
-/// y = N+1
-/// Operátorok:
-/// A lehetséges 8 ló lépés.
-/// </summary>
-class ÉhesHuszárÁllapot : AbsztraktÁllapot
-{
-    // Alapértelmezetten egy 3*3-as sakktáblán fut.
-    static int N = 3;
-    // A belső állapotot leíró mezők.
-    int x, y;
-    // Beállítja a kezdő állapotra a belső állapotot.
-    public ÉhesHuszárÁllapot()
-    {
-        x = 2; // A bal felső sarokból indulunk, ami a margó
-        y = 2; // miatt a (2,2) koordinátán van.
-    }
-    // Beállítja a kezdő állapotra a belső állapotot.
-    // Itt lehet megadni a tábla méretét is.
-    public ÉhesHuszárÁllapot(int n)
-    {
-        x = 2;
-        y = 2;
-        N = n;
-    }
-    public override bool CélÁllapotE()
-    {
-        // A jobb alsó sarok a margó miatt a (N+1,N+1) helyen van.
-        return x == N + 1 && y == N + 1;
-    }
-    public override bool ÁllapotE()
-    {
-        // a ló nem a margon van
-        return x >= 2 && y >= 2 && x <= N + 1 && y <= N + 1;
-    }
-    private bool preLóLépés(int x, int y)
-    {
-        // jó lólépés-e, ha nem akkor return false
-        if (!(x * y == 2 || x * y == -2)) return false;
-        return true;
-    }
-    /* Ez az operátorom, igaz ad vissza, ha alakalmazható, 
-    * egyébként hamisat.
-    * Paraméterek: 
-    * x: x irányú elmozdulás
-    * y: y irányú elmozdulás
-    * Az előfeltétel ellenőrzi, hogy az elmozdulás lólépés-e.
-    * Az utófeltétel ellenőrzi, hogy a táblán maradtunk-e.
-    * Példa:
-    * lóLépés(1,-2) jelentése felfelé 2-öt jobbra 1-et.
-    */
-    private bool lóLépés(int x, int y)
-    {
-        if (!preLóLépés(x, y)) return false;
-        // Ha az előfeltétel igaz, akkor megcsinálom az
-        // állapot átmenetet.
-        this.x += x;
-        this.y += y;
-        // Az utófeltétel mindig megegyezik az ÁllapotE-vel.
-        if (ÁllapotE()) return true;
-        // Ha az utófeltétel nem igaz, akkor vissza kell csinálni.
-        this.x -= x;
-        this.y -= y;
-        return false;
-    }
     public override bool SzuperOperátor(int i)
     {
-        switch (i)
-        { // itt sorolom fel a lehetséges 8 lólépést
-            case 0: return lóLépés(1, 2);
-            case 1: return lóLépés(1, -2);
-            case 2: return lóLépés(-1, 2);
-            case 3: return lóLépés(-1, -2);
-            case 4: return lóLépés(2, 1);
-            case 5: return lóLépés(2, -1);
-            case 6: return lóLépés(-2, 1);
-            case 7: return lóLépés(-2, -1);
-            default: return false;
-        }
+        throw new NotImplementedException();
     }
-    public override int OperátorokSzáma() { return 8; }
-    // A kiíratásnál kivonom x-ből és y-ból a margó szélességét.
-    public override string ToString() { return (x - 2) + " : " + (y - 2); }
-    public override bool Equals(Object a)
-    {
-        ÉhesHuszárÁllapot aa = (ÉhesHuszárÁllapot)a;
-        return aa.x == x && aa.y == y;
-    }
-    // Ha két példány egyenlő, akkor a hasítókódjuk is egyenlő.
-    public override int GetHashCode()
-    {
-        return x.GetHashCode() + y.GetHashCode();
-    }
-}
 
-
-/// <summary>
-/// A "3 szerzetes és 3 kannibál" probléma állapottér reprezentációja.
-/// Illetve általánosítása akárhány szerzetesre és kannibálra.
-/// Probléma: 3 szerzet és 3 kannibál van a folyó bal partján.
-/// Át kell juttatni az összes embert a másik partra.
-/// Ehhez rendelkezésre áll egy két személyes csónak.
-/// Egy ember is elég az átjutáshoz, de kettőnél több ember nem fér el.
-/// Ha valaki átmegy a másik oldalra, akkor ki is kell szállni, nem maradhat a csónakban.
-/// A gond ott van, hogy ha valamelyik parton több kannibál van,
-/// mint szerzetes, akkor a kannibálok megeszik a szerzeteseket.
-/// Kezdő állapot:
-/// 3 szerzetes a bal oldalon.
-/// 3 kannibál a bal oldalon.
-/// A csónak a bal parton van.
-/// 0 szerzetes a jobb oldalon.
-/// 0 kannibál a jobb oldalon.
-/// Ezt az állapotot ezzel a rendezett 5-össel írjuk le:
-/// (3,3,'B',0,0)
-/// A célállapot:
-/// (0,0,'J',3,3)
-/// Operátor:
-/// Op(int sz, int k):
-/// sz darab szerzetes átmegy a másik oldalra és
-/// k darab kannibál átmegy a másik oldalra.
-/// Lehetséges paraméterezése:
-/// Op(1,0): 1 szerzetes átmegy a másik oldalra.
-/// Op(2,0): 2 szerzetes átmegy a másik oldalra.
-/// Op(1,1): 1 szerzetes és 1 kannibál átmegy a másik oldalra.
-/// Op(0,1): 1 kannibál átmegy a másik oldalra.
-/// Op(0,2): 2 kanibál átmegy a másik oldalra.
-/// </summary>
-class SzerzetesekÉsKannibálokÁllapot : AbsztraktÁllapot
-{
-    int sz; // ennyi szerzetes van összesen
-    int k; // ennyi kannibál van összesen
-    int szb; // szerzetesek száma a bal oldalon
-    int kb; // kannibálok száma a bal oldalon
-    char cs; // Hol a csónak? Értéke vagy 'B' vagy 'J'.
-    int szj; // szerzetesek száma a jobb oldalon
-    int kj; // kannibálok száma a jobb oldalon
-    public SzerzetesekÉsKannibálokÁllapot(int sz, int k) // beállítja a kezdő állapotot
-    {
-        this.sz = sz;
-        this.k = k;
-        szb = sz;
-        kb = k;
-        cs = 'B';
-        szj = 0;
-        kj = 0;
-    }
     public override bool ÁllapotE()
-    { // igaz, ha a szerzetesek biztonságban vannak
-        return ((szb >= kb) || (szb == 0)) &&
-        ((szj >= kj) || (szj == 0));
-    }
-    public override bool CélÁllapotE()
     {
-        // igaz, ha mindenki átért a jobb oldalra
-        return szj == sz && kj == k;
-    }
-    private bool preOp(int sz, int k)
-    {
-        // A csónak 2 személyes, legalább egy ember kell az evezéshez.
-        // Ezt végül is felesleges vizsgálni, mert a szuper operátor csak ennek megfelelően hívja.
-        if (sz + k > 2 || sz + k < 0 || sz < 0 || k < 0) return false;
-        // Csak akkor lehet átvinni sz szerzetest és
-        // k kannibált, ha a csónak oldalán van is legalább ennyi.
-        if (cs == 'B')
-            return szb >= sz && kb >= k;
-        else
-            return szj >= sz && kj >= k;
-    }
-    // Átvisz a másik oldalra sz darab szerzetes és k darab kannibált.
-    private bool op(int sz, int k)
-    {
-        if (!preOp(sz, k)) return false;
-        SzerzetesekÉsKannibálokÁllapot mentes = (SzerzetesekÉsKannibálokÁllapot)Clone();
-        if (cs == 'B')
-        {
-            szb -= sz;
-            kb -= k;
-            cs = 'J';
-            szj += sz;
-            kj += k;
-        }
-        else
-        {
-            szb += sz;
-            kb += k;
-            cs = 'B';
-            szj -= sz;
-            kj -= k;
-        }
-        if (ÁllapotE()) return true;
-        szb = mentes.szb;
-        kb = mentes.kb;
-        cs = mentes.cs;
-        szj = mentes.szj;
-        kj = mentes.kj;
-        return false;
-    }
-    public override int OperátorokSzáma() { return 5; }
-    public override bool SzuperOperátor(int i)
-    {
-        switch (i)
-        {
-            case 0: return op(0, 1);
-            case 1: return op(0, 2);
-            case 2: return op(1, 1);
-            case 3: return op(1, 0);
-            case 4: return op(2, 0);
-            default: return false;
-        }
-    }
-    public override string ToString()
-    {
-        return szb + "," + kb + "," + cs + "," + szj + "," + kj;
-    }
-    public override bool Equals(Object a)
-    {
-        SzerzetesekÉsKannibálokÁllapot aa = (SzerzetesekÉsKannibálokÁllapot)a;
-        // szj és kj számítható, ezért nem kell vizsgálni
-        return aa.szb == szb && aa.kb == kb && aa.cs == cs;
-    }
-    // Ha két példány egyenlő, akkor a hasítókódjuk is egyenlő.
-    public override int GetHashCode()
-    {
-        return szb.GetHashCode() + kb.GetHashCode() + cs.GetHashCode();
+        throw new NotImplementedException();
     }
 }
 
@@ -662,17 +358,9 @@ class Program
         Csúcs startCsúcs;
         GráfKereső kereső;
         Console.WriteLine("Az éhes huszár problémát megoldjuk 4x4-es táblán.");
-        startCsúcs = new Csúcs(new ÉhesHuszárÁllapot(4));
+        startCsúcs = new Csúcs(new Feladat2p39());
         Console.WriteLine("A kereső egy 10 mélységi korlátos és emlékezetes backtrack.");
         kereső = new BackTrack(startCsúcs, 10, true);
-        kereső.megoldásKiírása(kereső.Keresés());
-        Console.WriteLine("A kereső egy mélységi keresés körfigyeléssel.");
-        kereső = new MélységiKeresés(startCsúcs, true);
-        kereső.megoldásKiírása(kereső.Keresés());
-        Console.WriteLine("A 3 szerzetes 3 kanibál problémát oldjuk meg.");
-        startCsúcs = new Csúcs(new SzerzetesekÉsKannibálokÁllapot(3, 3));
-        Console.WriteLine("A kereső egy 15 mélységi korlátos és emlékezetes backtrack.");
-        kereső = new BackTrack(startCsúcs, 15, true);
         kereső.megoldásKiírása(kereső.Keresés());
         Console.WriteLine("A kereső egy mélységi keresés körfigyeléssel.");
         kereső = new MélységiKeresés(startCsúcs, true);
