@@ -114,6 +114,26 @@ class Rud
     {
         return korongok;
     }
+
+    public bool CheckSorrend()
+    {
+        int i = 0;
+        if (korongok != null)
+        {
+            foreach (Korong korong in korongok)
+            {
+                if (korong.GetAtmero() > i)
+                {
+                    i = korong.GetAtmero();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 
 class Feladat2p39 : AbsztraktÁllapot
@@ -127,49 +147,40 @@ class Feladat2p39 : AbsztraktÁllapot
     }
     public override bool CélÁllapotE()
     {
-        int i = 0;
-        int j = 0;
 
         //rud1 sorrendjenek vizsgalata
-        foreach (Korong korong in rud1.GetKorongok())
+        if(rud1.CheckSorrend())
         {
-            if (korong.GetAtmero() > i)
-            {
-                i = korong.GetAtmero();
-            } else
-            {
-                return false;
-            }
+            return false;
         }
 
         //rud2 sorrendjenek vizsgalata
-        foreach (Korong korong in rud2.GetKorongok())
+        if (rud2.CheckSorrend())
         {
-            if (korong.GetAtmero() > j)
-            {
-                j = korong.GetAtmero();
-            }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         //rud1 szinek vizsgalata
-        foreach (Korong korong in rud1.GetKorongok())
+        if (rud1.GetKorongok() != null)
         {
-           if(!korong.GetSzin().Equals("piros"))
+            foreach (Korong korong in rud1.GetKorongok())
             {
-                return false;
+                if (!korong.GetSzin().Equals("piros"))
+                {
+                    return false;
+                }
             }
         }
 
         //rud2 szinek vizsgalata
-        foreach (Korong korong in rud2.GetKorongok())
+        if (rud2.GetKorongok() != null)
         {
-            if (!korong.GetSzin().Equals("piros"))
+            foreach (Korong korong in rud2.GetKorongok())
             {
-                return false;
+                if (!korong.GetSzin().Equals("piros"))
+                {
+                    return false;
+                }
             }
         }
 
@@ -208,7 +219,7 @@ class Feladat2p39 : AbsztraktÁllapot
 
     public override bool ÁllapotE()
     {
-        throw new NotImplementedException();
+        return rud1.GetKorongok().Count() >= 0 && rud2.GetKorongok().Count() >= 0 && rud2.GetKorongok().Count() >= 0 && rud1.GetKorongok().Count() < 9 && rud2.GetKorongok().Count() < 9 && rud2.GetKorongok().Count() < 9 && rud1.CheckSorrend() && rud2.CheckSorrend() && rud3.CheckSorrend();
     }
 }
 
