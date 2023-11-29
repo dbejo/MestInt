@@ -49,12 +49,12 @@ class Korong
         this.atmero = atmero;
     }
 
-    public string getSzin()
+    public string GetSzin()
     {
         return szin;
     }
 
-    public int getAtmero()
+    public int GetAtmero()
     {
         return atmero;
     }
@@ -62,7 +62,7 @@ class Korong
 
 class Rud
 {
-    List<Korong> korongok;
+    private List<Korong> korongok;
     public Rud(params Korong[] korongok)
     {
         this.korongok = korongok.ToList();
@@ -73,24 +73,52 @@ class Rud
         this.korongok = new List<Korong>();
     }
 
-    public void AddKorong(Korong korong)
+    public bool AddKorong(Korong korong)
     {
+        //hozza adando korong letezesenek megnezese
+        if (korong.Equals(null)) {
+            return false;
+        }
+
+        //korongok meretenek megnezese
+        if(korongok.Count() != 0 && korongok.Last().GetAtmero() > korong.GetAtmero())
+        {
+            return false;
+        }
+
+        //rudon levo hely megnezese
+        if (korongok.Count() < 9) { 
         korongok.Add(korong);
+            return true;
+        } else
+        {
+            return false;
+        }
+
     }
 
-    public Korong RemoveTopKorong()
+    public Korong? RemoveTopKorong()
     {
-        Korong korongToRemove = new Korong(korongok.Last().getSzin(), korongok.Last().getAtmero());
-        korongok.RemoveAt(korongok.Count - 1);
-        return korongToRemove;
+        if (korongok.Count() != 0)
+        {
+            Korong korongToRemove = new Korong(korongok.Last().GetSzin(), korongok.Last().GetAtmero());
+            korongok.RemoveAt(korongok.Count - 1);
+            return korongToRemove;
+        } else
+        {
+            return null;
+        }
+    }
+
+    public List<Korong> GetKorongok()
+    {
+        return korongok;
     }
 }
 
 class Feladat2p39 : AbsztraktÁllapot
 {
-    Rud rud1;
-    Rud rud2;
-    Rud rud3;
+    Rud rud1, rud2, rud3;
 
     public   Feladat2p39(Rud rud1, Rud rud2, Rud rud3) {
         this.rud1 = rud1;
@@ -99,17 +127,83 @@ class Feladat2p39 : AbsztraktÁllapot
     }
     public override bool CélÁllapotE()
     {
-        throw new NotImplementedException();
+        int i = 0;
+        int j = 0;
+
+        //rud1 sorrendjenek vizsgalata
+        foreach (Korong korong in rud1.GetKorongok())
+        {
+            if (korong.GetAtmero() > i)
+            {
+                i = korong.GetAtmero();
+            } else
+            {
+                return false;
+            }
+        }
+
+        //rud2 sorrendjenek vizsgalata
+        foreach (Korong korong in rud2.GetKorongok())
+        {
+            if (korong.GetAtmero() > j)
+            {
+                j = korong.GetAtmero();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //rud1 szinek vizsgalata
+        foreach (Korong korong in rud1.GetKorongok())
+        {
+           if(!korong.GetSzin().Equals("piros"))
+            {
+                return false;
+            }
+        }
+
+        //rud2 szinek vizsgalata
+        foreach (Korong korong in rud2.GetKorongok())
+        {
+            if (!korong.GetSzin().Equals("piros"))
+            {
+                return false;
+            }
+        }
+
+        //rudakon elhelyezkedo korongok szamanak vizsgalata
+        if(rud3.GetKorongok().Count() > 0 && rud1.GetKorongok().Count() != 8 && rud2.GetKorongok().Count() != 8)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public override int OperátorokSzáma()
     {
-        throw new NotImplementedException();
+        return 6;
     }
 
     public override bool SzuperOperátor(int i)
     {
-        throw new NotImplementedException();
+        switch(i)
+        {
+            case 0: return FelsoKorongAthelyeze(rud1, rud2);
+            case 1: return FelsoKorongAthelyeze(rud1, rud3);
+            case 2: return FelsoKorongAthelyeze(rud2, rud1);
+            case 3: return FelsoKorongAthelyeze(rud2, rud3);
+            case 4: return FelsoKorongAthelyeze(rud3, rud1);
+            case 5: return FelsoKorongAthelyeze(rud3, rud2);
+            default: return false;
+        }
+    }
+
+    private bool FelsoKorongAthelyeze(Rud from, Rud to)
+    {
+        return to.AddKorong(from.RemoveTopKorong());
     }
 
     public override bool ÁllapotE()
@@ -388,7 +482,7 @@ class Program
     {
         Csúcs startCsúcs;
         GráfKereső kereső;
-        Console.WriteLine("Az éhes huszár problémát megoldjuk 4x4-es táblán.");
+        Console.WriteLine("piros kek korongos problema megoldasa");
         startCsúcs = new Csúcs(new Feladat2p39(new Rud(
             new Korong("kek", 8),
             new Korong("piros", 7),
