@@ -181,7 +181,7 @@ public class Rud
         if (korongok.Count() != 0)
         {
             int j = korongok.Last().GetAtmero();
-            for (int i = 0; i < korongok.Count() -1 ; i++)
+            for (int i = korongok.Count() - 1; i >= 0 ; i--)
             {
                 if (korongok[i].GetAtmero() - 1 == j || korongok[i].GetAtmero() == j)
                 {

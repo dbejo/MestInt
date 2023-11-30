@@ -103,15 +103,27 @@ namespace FeladatTests
         }
 
         [Test]
-        public void CheckSorrendRosszTest1()
+        public void CheckSorrendTest2()
         {
             rud2.AddKorong(new Korong("kek", 4));
-            rud2.AddKorong(new Korong("kek", 2));
             rud2.AddKorong(new Korong("kek", 3));
+            rud2.AddKorong(new Korong("kek", 2));
             rud2.AddKorong(new Korong("kek", 1));
             Assert.That(rud2.GetKorongok().Last().GetAtmero(), Is.EqualTo(1));
             bool isInSorrend = rud2.CheckSorrend();
-            Assert.That(isInSorrend, Is.False);
+            Assert.That(isInSorrend, Is.True);
         }
+
+        [Test]
+        public void CheckSorrendTest3()
+        {
+            rud2.AddKorong(new Korong("kek", 4));
+            rud2.AddKorong(new Korong("kek", 3));
+            rud2.AddKorong(new Korong("kek", 2));
+            Assert.That(rud2.GetKorongok().Last().GetAtmero(), Is.EqualTo(2));
+            bool isInSorrend = rud2.CheckSorrend();
+            Assert.That(isInSorrend, Is.True);
+        }
+
     }
 }
