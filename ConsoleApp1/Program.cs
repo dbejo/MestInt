@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using System.Security.Cryptography.X509Certificates;
+
+/// <summary>
 /// Minden állapot osztály őse.
 /// </summary>
 abstract class AbsztraktÁllapot : ICloneable
@@ -40,7 +42,7 @@ abstract class AbsztraktÁllapot : ICloneable
     public override int GetHashCode() { return base.GetHashCode(); }
 }
 
-class Korong
+public class Korong
 {
     string szin;
     int atmero;
@@ -58,9 +60,45 @@ class Korong
     {
         return atmero;
     }
+
+    public override string ToString()
+    {
+        if(szin.Equals("kek"))
+        {
+            switch(atmero)
+            {
+                case 1: return "       kk";
+                case 2: return "      kkkk";
+                case 3: return "     kkkkkk";
+                case 4: return "    kkkkkkkk";
+                case 5: return "   kkkkkkkkkk";
+                case 6: return "  kkkkkkkkkkkk";
+                case 7: return " kkkkkkkkkkkkkk";
+                case 8: return "kkkkkkkkkkkkkkkk";
+                default: return "               ";
+            }
+        } else if(szin.Equals("piros"))
+        {
+            switch (atmero)
+            {
+                case 1: return "       pp";
+                case 2: return "      pppp";
+                case 3: return "     pppppp";
+                case 4: return "    pppppppp";
+                case 5: return "   pppppppppp";
+                case 6: return "  pppppppppppp";
+                case 7: return " pppppppppppppp";
+                case 8: return "pppppppppppppppp";
+                default: return "               ";
+            }
+        } else
+        {
+            return "rossz szin";
+        }
+    }
 }
 
-class Rud
+public class Rud
 {
     private List<Korong> korongok;
     public Rud(params Korong[] korongok)
@@ -76,18 +114,41 @@ class Rud
     public bool AddKorong(Korong korong)
     {
         //hozza adando korong letezesenek megnezese
-        if (korong.Equals(null)) {
+        if (korong == null) {
             return false;
         }
 
-        //korongok meretenek megnezese
-        if(korongok.Count() != 0 && korongok.Last().GetAtmero() > korong.GetAtmero())
+        if (korongok.Count() != 0)
         {
-            return false;
+            if (korongok[korongok.Count() - 1].GetAtmero() < korong.GetAtmero())
+            {
+                return false;
+            }
+        
+
+            if(!(korongok[korongok.Count() - 1].GetAtmero() != korong.GetAtmero() || korongok[korongok.Count() - 1].GetAtmero() + 1 != korong.GetAtmero()))
+            {
+                return false;
+            }
+            /*Console.WriteLine("======");
+            Console.WriteLine("AddKorong \n utolso korong atmeroje: ");
+            Console.WriteLine(korongok.Last().GetAtmero());
+            Console.WriteLine("rarakando korong atmeroje: ");
+            Console.WriteLine(korong.GetAtmero());
+            Console.WriteLine("======");*/
         }
+
+       /* Console.WriteLine("======");
+        Console.WriteLine("AddKorong \n utolso korong atmeroje: ");
+        Console.WriteLine(korongok.Count());
+        Console.WriteLine("rarakando korong atmeroje: ");
+        Console.WriteLine(korong.GetAtmero());
+        Console.WriteLine("======");*/
+
+
 
         //rudon levo hely megnezese
-        if (korongok.Count() < 9) { 
+        if (korongok.Count() < 9) {
         korongok.Add(korong);
             return true;
         } else
@@ -102,7 +163,7 @@ class Rud
         if (korongok.Count() != 0)
         {
             Korong korongToRemove = new Korong(korongok.Last().GetSzin(), korongok.Last().GetAtmero());
-            korongok.RemoveAt(korongok.Count - 1);
+            korongok.RemoveAt(korongok.Count() - 1);
             return korongToRemove;
         } else
         {
@@ -117,14 +178,14 @@ class Rud
 
     public bool CheckSorrend()
     {
-        int i = 0;
-        if (korongok != null)
+        if (korongok.Count() != 0)
         {
-            foreach (Korong korong in korongok)
+            int j = korongok.Last().GetAtmero();
+            for (int i = 0; i < korongok.Count() -1 ; i++)
             {
-                if (korong.GetAtmero() > i)
+                if (korongok[i].GetAtmero() - 1 == j || korongok[i].GetAtmero() == j)
                 {
-                    i = korong.GetAtmero();
+                    j = korongok[i].GetAtmero();
                 }
                 else
                 {
@@ -133,6 +194,11 @@ class Rud
             }
         }
         return true;
+    }
+
+    public override string ToString()
+    {
+        return string.Concat(korongok.Select(korong => korong.ToString() + "\n").Reverse());
     }
 }
 
@@ -147,20 +213,27 @@ class Feladat2p39 : AbsztraktÁllapot
     }
     public override bool CélÁllapotE()
     {
+        Console.WriteLine("Rud1");
+        Console.WriteLine(rud1.ToString());
+        Console.WriteLine("Rud2");
+        Console.WriteLine(rud2.ToString());
+        Console.WriteLine("Rud3");
+        Console.WriteLine(rud3.ToString());
+        Console.WriteLine(" \n");
 
-        //rud1 sorrendjenek vizsgalata
-        if(rud1.CheckSorrend())
+        //Console.WriteLine("rud1 sorrendjenek vizsgalata");
+        if (!rud1.CheckSorrend())
         {
             return false;
         }
 
-        //rud2 sorrendjenek vizsgalata
-        if (rud2.CheckSorrend())
+        //Console.WriteLine("rud2 sorrendjenek vizsgalata");
+        if (!rud2.CheckSorrend())
         {
             return false;
         }
 
-        //rud1 szinek vizsgalata
+        //Console.WriteLine("rud1 szinek vizsgalata");
         if (rud1.GetKorongok() != null)
         {
             foreach (Korong korong in rud1.GetKorongok())
@@ -172,7 +245,7 @@ class Feladat2p39 : AbsztraktÁllapot
             }
         }
 
-        //rud2 szinek vizsgalata
+        //Console.WriteLine("rud2 szinek vizsgalata");
         if (rud2.GetKorongok() != null)
         {
             foreach (Korong korong in rud2.GetKorongok())
@@ -184,8 +257,8 @@ class Feladat2p39 : AbsztraktÁllapot
             }
         }
 
-        //rudakon elhelyezkedo korongok szamanak vizsgalata
-        if(rud3.GetKorongok().Count() > 0 && rud1.GetKorongok().Count() != 8 && rud2.GetKorongok().Count() != 8)
+        //Console.WriteLine("rudakon elhelyezkedo korongok szamanak vizsgalata");
+        if (rud3.GetKorongok().Count() > 0 && rud1.GetKorongok().Count() != 8 && rud2.GetKorongok().Count() != 8)
         {
             return false;
         }
@@ -491,10 +564,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        Csúcs startCsúcs;
-        GráfKereső kereső;
-        Console.WriteLine("piros kek korongos problema megoldasa");
-        startCsúcs = new Csúcs(new Feladat2p39(new Rud(
+        Rud rud1 = new Rud(
             new Korong("kek", 8),
             new Korong("piros", 7),
             new Korong("kek", 6),
@@ -502,8 +572,8 @@ class Program
             new Korong("kek", 4),
             new Korong("piros", 3),
             new Korong("kek", 2),
-            new Korong("piros", 1)),
-            new Rud(
+            new Korong("piros", 1));
+        Rud rud2 = new Rud(
             new Korong("piros", 8),
             new Korong("kek", 7),
             new Korong("piros", 6),
@@ -511,15 +581,26 @@ class Program
             new Korong("piros", 4),
             new Korong("kek", 3),
             new Korong("piros", 2),
-            new Korong("kek", 1)),
-            new Rud()
-            ));
+            new Korong("kek", 1));
+        Rud rud3 = new Rud();
+        Csúcs startCsúcs;
+        GráfKereső kereső;
+        Console.WriteLine("piros kek korongos problema megoldasa");
+        startCsúcs = new Csúcs(new Feladat2p39(rud1, rud2, rud3));
+        Console.WriteLine("Alap allapot");
+        Console.WriteLine("Rud1");
+        Console.WriteLine(rud1.ToString());
+        Console.WriteLine("Rud2");
+        Console.WriteLine(rud2.ToString());
+        Console.WriteLine("Rud3");
+        Console.WriteLine(rud3.ToString());
+        Console.WriteLine(" \n");
         Console.WriteLine("A kereső egy 10 mélységi korlátos és emlékezetes backtrack.");
-        kereső = new BackTrack(startCsúcs, 10, true);
+        kereső = new BackTrack(startCsúcs, 50, true);
         kereső.megoldásKiírása(kereső.Keresés());
-        Console.WriteLine("A kereső egy mélységi keresés körfigyeléssel.");
-        kereső = new MélységiKeresés(startCsúcs, true);
-        kereső.megoldásKiírása(kereső.Keresés());
+        //Console.WriteLine("A kereső egy mélységi keresés körfigyeléssel.");
+        //kereső = new MélységiKeresés(startCsúcs, true);
+        //kereső.megoldásKiírása(kereső.Keresés());
         Console.ReadLine();
     }
 }
