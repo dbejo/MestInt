@@ -596,11 +596,11 @@ class Program
         Console.WriteLine(rud3.ToString());
         Console.WriteLine(" \n");
         Console.WriteLine("A kereső egy 10 mélységi korlátos és emlékezetes backtrack.");
-        kereső = new BackTrack(startCsúcs, 50, true);
-        kereső.megoldásKiírása(kereső.Keresés());
-        //Console.WriteLine("A kereső egy mélységi keresés körfigyeléssel.");
-        //kereső = new MélységiKeresés(startCsúcs, true);
+        //kereső = new BackTrack(startCsúcs, 10, true);
         //kereső.megoldásKiírása(kereső.Keresés());
+        Console.WriteLine("A kereső egy mélységi keresés körfigyeléssel.");
+        kereső = new MélységiKeresés(startCsúcs, true);
+        kereső.megoldásKiírása(kereső.Keresés());
         Console.ReadLine();
     }
 }

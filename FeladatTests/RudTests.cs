@@ -24,6 +24,8 @@ namespace FeladatTests
             Assert.That(removedKorong.GetSzin(), Is.EqualTo("kek"));
             Assert.That(removedKorong.GetAtmero(), Is.EqualTo(1));
             Assert.That(rud1.GetKorongok().Count(), Is.EqualTo(1));
+            Assert.That(rud1.GetKorongok().Last().GetSzin(), Is.EqualTo("piros"));
+            Assert.That(rud1.GetKorongok().Last().GetAtmero(), Is.EqualTo(2));
         }
 
         [Test]
@@ -123,6 +125,22 @@ namespace FeladatTests
             Assert.That(rud2.GetKorongok().Last().GetAtmero(), Is.EqualTo(2));
             bool isInSorrend = rud2.CheckSorrend();
             Assert.That(isInSorrend, Is.True);
+        }
+
+        [Test]
+        public void FelsoKorongAthelyezeTest1()
+        {
+            bool isSuccessful = FelsoKorongAthelyeze(rud1, rud2);
+            Assert.That(isSuccessful, Is.True);
+            Assert.That(rud1.GetKorongok().Count(), Is.EqualTo(1));
+            Assert.That(rud2.GetKorongok().Count(), Is.EqualTo(1));
+            Assert.That(rud1.GetKorongok().Last().GetSzin(), Is.EqualTo("piros"));
+            Assert.That(rud2.GetKorongok().Last().GetSzin(), Is.EqualTo("kek"));
+        }
+
+        bool FelsoKorongAthelyeze(Rud from, Rud to)
+        {
+            return to.AddKorong(from.RemoveTopKorong());
         }
 
     }
