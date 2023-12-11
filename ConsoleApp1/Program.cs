@@ -196,6 +196,26 @@ public class Rud
         return true;
     }
 
+    public bool CheckNovekvo()
+    {
+        if(korongok.Count() != 0)
+        {
+            int j = korongok.Last().GetAtmero();
+            for (int i = korongok.Count() - 1; i >= 0; i--)
+            {
+                if (korongok[i].GetAtmero() >= j)
+                {
+                    j = korongok[i].GetAtmero();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public override string ToString()
     {
         return string.Concat(korongok.Select(korong => korong.ToString() + "\n").Reverse());
@@ -211,6 +231,18 @@ class Feladat2p39 : AbsztraktÁllapot
         this.rud2 = rud2;
         this.rud3 = rud3;
     }
+
+    public override bool Equals(object a)
+    {
+        if (a == null) return false;
+        if (!(a is Feladat2p39)) return false;
+        Feladat2p39 masik = a as Feladat2p39;
+        return this.rud1.Equals(masik.rud1) &&
+            this.rud2.Equals(masik.rud2) &&
+            this.rud3.Equals(masik.rud3);
+
+    }
+
     public override bool CélÁllapotE()
     {
         Console.WriteLine("Rud1");
@@ -250,7 +282,7 @@ class Feladat2p39 : AbsztraktÁllapot
         {
             foreach (Korong korong in rud2.GetKorongok())
             {
-                if (!korong.GetSzin().Equals("piros"))
+                if (!korong.GetSzin().Equals("kek"))
                 {
                     return false;
                 }
@@ -292,7 +324,7 @@ class Feladat2p39 : AbsztraktÁllapot
 
     public override bool ÁllapotE()
     {
-        return rud1.GetKorongok().Count() >= 0 && rud2.GetKorongok().Count() >= 0 && rud2.GetKorongok().Count() >= 0 && rud1.GetKorongok().Count() < 9 && rud2.GetKorongok().Count() < 9 && rud2.GetKorongok().Count() < 9 && rud1.CheckSorrend() && rud2.CheckSorrend() && rud3.CheckSorrend();
+        return rud1.GetKorongok().Count() >= 0 && rud2.GetKorongok().Count() >= 0 && rud3.GetKorongok().Count() >= 0 && rud1.GetKorongok().Count() <= 9 && rud2.GetKorongok().Count() <= 9 && rud3.GetKorongok().Count() <= 9 && rud1.CheckNovekvo() && rud2.CheckNovekvo() && rud3.CheckNovekvo();
     }
 }
 
@@ -564,6 +596,7 @@ class Program
 {
     static void Main(string[] args)
     {
+        //kevesebb koronggal probaljam
         Rud rud1 = new Rud(
             new Korong("kek", 8),
             new Korong("piros", 7),
@@ -595,7 +628,7 @@ class Program
         Console.WriteLine("Rud3");
         Console.WriteLine(rud3.ToString());
         Console.WriteLine(" \n");
-        Console.WriteLine("A kereső egy 10 mélységi korlátos és emlékezetes backtrack.");
+        //Console.WriteLine("A kereső egy 10 mélységi korlátos és emlékezetes backtrack.");
         //kereső = new BackTrack(startCsúcs, 10, true);
         //kereső.megoldásKiírása(kereső.Keresés());
         Console.WriteLine("A kereső egy mélységi keresés körfigyeléssel.");

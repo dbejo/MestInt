@@ -97,6 +97,25 @@ namespace FeladatTests
         }
 
         [Test]
+        public void CheckNovekvoTest1()
+        {
+            rud2.AddKorong(new Korong("piros", 8));
+            Assert.That(rud2.AddKorong(new Korong("kek", 1)), Is.True);
+            Assert.That(rud2.CheckSorrend(), Is.False);
+            Assert.That(rud2.CheckNovekvo(), Is.True);
+        }
+
+        [Test]
+        public void CheckNovekvoTest2()
+        {
+            rud2.AddKorong(new Korong("piros", 1));
+            Assert.That(rud2.AddKorong(new Korong("kek", 8)), Is.False);
+            Assert.That(rud2.CheckSorrend(), Is.True);
+            Assert.That(rud2.CheckNovekvo(), Is.True);
+        }
+
+
+        [Test]
         public void CheckSorrendTest()
         {
             Assert.That(rud1.GetKorongok().Last().GetAtmero(), Is.EqualTo(1));
