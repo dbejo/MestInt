@@ -157,9 +157,38 @@ namespace FeladatTests
             Assert.That(rud2.GetKorongok().Last().GetSzin(), Is.EqualTo("kek"));
         }
 
+        [Test]
+        public void FelsoKorongAthelyezeTest2()
+        {
+            Rud rud3 = new Rud();
+            rud2.AddKorong(new Korong("piros", 8));
+            rud3.AddKorong(new Korong("piros", 1));
+            bool isSuccessful = FelsoKorongAthelyeze(rud2, rud3);
+            Assert.That(isSuccessful, Is.False);
+            Assert.That(rud2.GetKorongok().Count(), Is.EqualTo(1));
+            Assert.That(rud3.GetKorongok().Count(), Is.EqualTo(1));
+        }
+
         bool FelsoKorongAthelyeze(Rud from, Rud to)
         {
-            return to.AddKorong(from.RemoveTopKorong());
+            if (from.GetKorongok().Count() == 0)
+            {
+                return false;
+            }
+            Korong korongToRemove = new Korong(from.GetKorongok().Last().GetSzin(), from.GetKorongok().Last().GetAtmero());
+            if (korongToRemove != null)
+            {
+                if (to.AddKorong(korongToRemove))
+                {
+                    from.RemoveTopKorong();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return false;
         }
 
     }

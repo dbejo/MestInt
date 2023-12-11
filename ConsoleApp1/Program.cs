@@ -225,11 +225,15 @@ public class Rud
 class Feladat2p39 : AbsztraktÁllapot
 {
     Rud rud1, rud2, rud3;
+    int korongokSzama;
+    int maxKorongEgyRudon;
 
-    public   Feladat2p39(Rud rud1, Rud rud2, Rud rud3) {
+    public   Feladat2p39(Rud rud1, Rud rud2, Rud rud3, int korongokSzama) {
         this.rud1 = rud1;
         this.rud2 = rud2;
         this.rud3 = rud3;
+        this.korongokSzama = korongokSzama;
+        this.maxKorongEgyRudon = korongokSzama/2 + 1;
     }
 
     public override bool Equals(object a)
@@ -239,20 +243,14 @@ class Feladat2p39 : AbsztraktÁllapot
         Feladat2p39 masik = a as Feladat2p39;
         return this.rud1.Equals(masik.rud1) &&
             this.rud2.Equals(masik.rud2) &&
-            this.rud3.Equals(masik.rud3);
+            this.rud3.Equals(masik.rud3) &&
+            this.korongokSzama == masik.korongokSzama &&
+            this.maxKorongEgyRudon == masik.maxKorongEgyRudon;
 
     }
 
     public override bool CélÁllapotE()
     {
-        Console.WriteLine("Rud1");
-        Console.WriteLine(rud1.ToString());
-        Console.WriteLine("Rud2");
-        Console.WriteLine(rud2.ToString());
-        Console.WriteLine("Rud3");
-        Console.WriteLine(rud3.ToString());
-        Console.WriteLine(" \n");
-
         //Console.WriteLine("rud1 sorrendjenek vizsgalata");
         if (!rud1.CheckSorrend())
         {
@@ -290,7 +288,7 @@ class Feladat2p39 : AbsztraktÁllapot
         }
 
         //Console.WriteLine("rudakon elhelyezkedo korongok szamanak vizsgalata");
-        if (rud3.GetKorongok().Count() > 0 && rud1.GetKorongok().Count() != 8 && rud2.GetKorongok().Count() != 8)
+        if (rud3.GetKorongok().Count() > 0 && rud1.GetKorongok().Count() != (korongokSzama/2) && rud2.GetKorongok().Count() != (korongokSzama/2))
         {
             return false;
         }
@@ -319,17 +317,38 @@ class Feladat2p39 : AbsztraktÁllapot
 
     private bool FelsoKorongAthelyeze(Rud from, Rud to)
     {
-        return to.AddKorong(from.RemoveTopKorong());
+        if (from.GetKorongok().Count() == 0)
+        {
+            return false;
+        }
+        Korong korongToRemove = new Korong(from.GetKorongok().Last().GetSzin(), from.GetKorongok().Last().GetAtmero());
+        if (korongToRemove != null)
+        {
+            if(to.AddKorong(korongToRemove))
+            {
+                from.RemoveTopKorong();
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+        return false;
     }
 
     public override bool ÁllapotE()
     {
-        return rud1.GetKorongok().Count() >= 0 && rud2.GetKorongok().Count() >= 0 && rud3.GetKorongok().Count() >= 0 && rud1.GetKorongok().Count() <= 9 && rud2.GetKorongok().Count() <= 9 && rud3.GetKorongok().Count() <= 9 && rud1.CheckNovekvo() && rud2.CheckNovekvo() && rud3.CheckNovekvo();
+        return rud1.GetKorongok().Count() >= 0 && rud2.GetKorongok().Count() >= 0 && rud3.GetKorongok().Count() >= 0 && rud1.GetKorongok().Count() <= maxKorongEgyRudon && rud2.GetKorongok().Count() <= maxKorongEgyRudon && rud3.GetKorongok().Count() <= maxKorongEgyRudon && rud1.CheckNovekvo() && rud2.CheckNovekvo() && rud3.CheckNovekvo();
     }
 
     public override int GetHashCode()
     {
-        return rud1.GetHashCode() * 3 + rud2.GetHashCode() * 7 + rud3.GetHashCode() * 11; 
+        return rud1.GetHashCode() * 3 + rud2.GetHashCode() * 7 + rud3.GetHashCode() * 11 + korongokSzama * 17 + maxKorongEgyRudon * 24; 
+    }
+
+    public override string ToString()
+    {
+        return $"Rud 1\n{rud1.ToString()}\nRud 1\n{rud2.ToString()}\nRud 3\n{rud3.ToString()}\n";
     }
 }
 
@@ -603,19 +622,19 @@ class Program
     {
         //kevesebb koronggal probaljam
         Rud rud1 = new Rud(
-            new Korong("kek", 8),
+            /*new Korong("kek", 8),
             new Korong("piros", 7),
             new Korong("kek", 6),
-            new Korong("piros", 5),
+            new Korong("piros", 5),*/
             new Korong("kek", 4),
             new Korong("piros", 3),
             new Korong("kek", 2),
             new Korong("piros", 1));
         Rud rud2 = new Rud(
-            new Korong("piros", 8),
+            /*new Korong("piros", 8),
             new Korong("kek", 7),
             new Korong("piros", 6),
-            new Korong("kek", 5),
+            new Korong("kek", 5),*/
             new Korong("piros", 4),
             new Korong("kek", 3),
             new Korong("piros", 2),
@@ -624,7 +643,7 @@ class Program
         Csúcs startCsúcs;
         GráfKereső kereső;
         Console.WriteLine("piros kek korongos problema megoldasa");
-        startCsúcs = new Csúcs(new Feladat2p39(rud1, rud2, rud3));
+        startCsúcs = new Csúcs(new Feladat2p39(rud1, rud2, rud3, 8));
         Console.WriteLine("Alap allapot");
         Console.WriteLine("Rud1");
         Console.WriteLine(rud1.ToString());
