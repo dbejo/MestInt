@@ -326,6 +326,11 @@ class Feladat2p39 : AbsztraktÁllapot
     {
         return rud1.GetKorongok().Count() >= 0 && rud2.GetKorongok().Count() >= 0 && rud3.GetKorongok().Count() >= 0 && rud1.GetKorongok().Count() <= 9 && rud2.GetKorongok().Count() <= 9 && rud3.GetKorongok().Count() <= 9 && rud1.CheckNovekvo() && rud2.CheckNovekvo() && rud3.CheckNovekvo();
     }
+
+    public override int GetHashCode()
+    {
+        return rud1.GetHashCode() * 3 + rud2.GetHashCode() * 7 + rud3.GetHashCode() * 11; 
+    }
 }
 
 /// <summary>
